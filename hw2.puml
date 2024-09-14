@@ -1,0 +1,123 @@
+@startuml library_system
+
+!function $unique($a)
+!return "<color:Crimson>" + $a + " <<unique>></color>"
+!endfunction
+
+!function $setBold($a)
+!return "<b>" + $a + " </b>"
+!endfunction
+
+!function $setUnderscore($a)
+!return "<u>" + $a + " </u>"
+!endfunction
+
+skinparam entity {
+  BackgroundColor YellowGreen
+  BorderColor DarkSlateGray
+  FontColor Black
+  FontSize 12
+  AttributeBackgroundColor PaleGreen
+  AttributeFontColor DarkGreen
+}
+
+skinparam rectangle {
+  BackgroundColor HoneyDew
+  BorderColor DarkOliveGreen
+}
+
+title E/R diagram for library system
+
+header Miroshnichenko Denis 225
+
+rectangle "Task 1" {
+    entity PublishHouse {
+        $setBold("Name")
+        Address
+    }
+
+    entity Category {
+        $setBold("Name")
+    }
+
+    entity Reader {
+        $setBold("Id")
+        surname
+        firstname
+        address
+        birthday
+    }
+
+    entity BookCopy {
+        $setBold("ISBN")
+        $setBold("CopyId")
+        shelfOrder
+    }
+
+    entity Book {
+        $setBold("ISBN")
+        publishYear
+        bookTitle
+        author
+        pageAmount
+    }
+
+    Reader "0, 1" -- "N" BookCopy : take to read and set return date
+    Category "N" -- "M" Book : relate to category
+    PublishHouse "1" -- "N" Book : published
+    Category "N" -- "0, 1" Category : is a subcategory
+    BookCopy "1..N" -- "1" Book : is book copy
+}
+
+rectangle "Task 2.1" {
+    entity Flat {}
+    entity Country {}
+    entity City {}
+    entity Street {}
+    entity House {}
+
+    Flat "N" -- "1" House : in
+    House "N" -- "1" Street : on
+    Street "N" -- "1" City : in
+    City "N" -- "1" Country : in
+}
+
+rectangle "Task 2.2" {
+    entity Referee {}
+    entity FootballTeam {}
+    entity FootballGame {}
+
+    Referee "1" -- "N" FootballGame : manage
+    FootballGame "N" -- "1" FootballTeam : was played by 1 team
+    FootballGame "N" -- "1" FootballTeam : was played by 2 team
+}
+
+rectangle "Task 2.3" {
+    entity Person {
+        +ID
+        +firstName
+        +lastName
+        +birthday
+    }
+
+    entity Man extends Person {
+        +gender = "Male"
+    }
+
+    entity Woman extends Person {
+        +gender = "Female"
+    }
+
+    entity Father extends Man {
+        +isFatherOf : Person
+    }
+
+    entity Mother extends Woman {
+        +isMotherOf : Person
+    }
+
+    Person "0..1" -- "1" Father : has father
+    Person "0..1" -- "1" Mother : has mother
+}
+
+@enduml
